@@ -1,7 +1,5 @@
-const dC = document.getElementById('canvas-demo').getContext('2d');
-
-window.onload = () => {
-
+// window.onload = () => {
+  // const dC = document.getElementById('canvas-demo').getContext('2d');
   // dC.moveTo(10,10);
   // dC.lineTo(110,10);
 
@@ -24,10 +22,25 @@ window.onload = () => {
   // dC.arc(110, 300, 22.5,0 ,2*Math.PI, false );
 
   // dC.stroke();
+// }
 
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-  
+let playAnim = false;
+
+let ball = {x:30, y: 30, speed: 0.1, t:0, radius:20};
+
+function animate() {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 }
+
+animate();
+
+canvas.addEventListener("click", () => {
+  playAnim = true;
+})
 
 //Coefficient calculations for control points Bezier Curve animation movement
 
