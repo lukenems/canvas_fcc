@@ -29,11 +29,59 @@ const ctx = canvas.getContext("2d");
 
 let playAnim = false;
 
-let ball = {x:30, y: 30, speed: 0.1, t:0, radius:20};
+let ball = {x:30, y: 30, speed: 0.01, t:0, radius:20};
+
+//Bezier curve points
+let points = [
+  {x:ball.x, y:ball.y},
+  {x:70, y:200},
+  {x:125, y:295},
+  {x:350, y:350}
+]
+
+function drawBall() {
+  ctx.fillStyle = "black";
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2,false);
+  ctx.fill();
+}
+
+function moveBallInBezierCurve() {
+  let [p0, p1, p2, p3] = points;
+//Calculate the coefficients based on where the ball currently is in the animation
+  let cx = 3 * (p1.x - p0.x);
+  let bx = 3 * (p2.x - p1.x) - cx;
+  let ax = p3.x - p0.x - cx -bx;
+
+  let cy = 3 * (p1.y - p0.y);
+  let by = 3 * (p2.y - p1.y) - cy;
+  let ay = p3.y - p0.y - cy -by;
+// Get t value before incrementing speed
+  let t = ball.t;
+// Increment t value by speed
+  ball.t += ball.speed;
+// Calculate new X & Y positions of the ball for next frame
+  let xt = ax* (t*t*t) + bx*(t*t) + cx*t + p0.x;
+  let yt = ay* (t*t*t) + by*(t*t) + cy*t + p0.y;
+// ensures that ball will not keep moving by holding value of t at 1
+  if(ball.t > 1){
+    ball.t=1;
+  }
+// Draw the ball on the canvas at the new location
+  ball.x = xt;
+  ball.y = yt;
+  drawBall();
+}
 
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0,0,canvas.width,canvas.height);
+  //Ball will not be drawn unless you call drawBall() on every frame
+  if(!playAnim){
+    drawBall();
+  }else{
+    moveBallInBezierCurve();
+  }
 }
 
 animate();
@@ -59,3 +107,9 @@ canvas.addEventListener("click", () => {
 // var yt = ay* (t*t*t) + by*(t*t) + cy*t + p0.y;
 
 // var = ball = {x:0, y:0, speed:.01, t:0}
+
+// Code for finding center of object for use in animation; instead of top left corner
+// player.x = xt-bullseye.width/2;
+// player.y = yt-bullseye.height/2;
+
+// context.drawImage(bullseye, player.x, player.y);
