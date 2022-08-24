@@ -29,14 +29,14 @@ const ctx = canvas.getContext("2d");
 
 let playAnim = false;
 
-let ball = {x:30, y: 30, speed: 0.01, t:0, radius:20};
+let ball = {x:160, y: 521, speed: 0.01, t:0, radius:20};
 
 //Bezier curve points
 let points = [
   {x:ball.x, y:ball.y},
-  {x:70, y:200},
-  {x:125, y:295},
-  {x:350, y:350}
+  {x:565, y:70},
+  {x:13, y:70},
+  {x:458, y:400}
 ]
 
 function drawBall() {
